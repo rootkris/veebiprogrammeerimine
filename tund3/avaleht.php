@@ -1,15 +1,17 @@
 <?php
-	//1. git add . 2. git commit -m "lisatud kahe tingimusega if" 3. git push - et lisada githubi
 	//Muutujad
 	$myName = "Kristo";
 	$myFamilyName = "Roots";
-	//$practiceStarted = "2017-09-11 8.15";
-	$practiceStarted = date("d.m.Y") ." " ."8.15";
+	$myAge = 0;
+	$myBirthYear;
+	$myLivedYearsList = "";
 	
-	//echo strtotime($practiceStarted);
-	//echo strtotime("now");
-	$timePassed = round((strtotime("now") - strtotime($practiceStarted)) / 60);
-	echo $timePassed;
+	
+	$monthNamesEt = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august",
+	"september", "oktoober", "november", "detsember"];
+	
+	//var_dump($monthNamesEt);
+	//echo $monthNamesEt[8];
 	
 	$hourNow = date("H");
 	$partOfDay = "";
@@ -23,6 +25,21 @@
 	
 	if ($hourNow >= 16){
 		$partOfDay = "vaba aeg.";
+	}
+	
+	//Nüüd vaatame, kas ja mida kasutaja sisestas
+	//var_dump($_POST);
+	if (isset($_POST["yearBirth"])){
+		$myBirthYear = $_POST["yearBirth"];
+		$myAge = date("Y") - $_POST["yearBirth"];
+		
+		//tekitame loendi kõigist elatud aastatest
+		$myLivedYearsList .= "<ol> \n";
+		for ($i = $myBirthYear; $i <= date("Y"); $i++){
+			//echo $i;
+			$myLivedYearsList .= "<li>" . $i ."</li> \n";
+		}	
+		$myLivedYearsList .= "</ol> \n";	
 	}
 	
 	function sum($x, $y) {
@@ -51,7 +68,8 @@
 	<?php
 		echo "<p>Täna on vastik ilm!</p>";
 		echo "<p>Täna on ";
-		echo date("d.m.Y");
+		$monthIndex = date("n") - 1;    //n on kuu ilma lisanullita ees
+		echo date("d. ") .$monthNamesEt[$monthIndex] .date(" Y");
 		echo ".</p>";
 		echo "<p>Lehe laadimise hetkel oli kell: " .date("H:i:s") ."</p>";
 		echo "Praegu on " . $partOfDay ."";
@@ -64,6 +82,21 @@
 		echo "2 + 4 = " . sum(2,4);
 		echo "<p>Minu hobid on " . $hobid[0] . ", " . $hobid[1] . " ja " . $hobid[2] . ".</p>";
 		
+	?>
+	<h2>Vanus</h2>
+	<p>Järgnevalt palume sisestada oma sünniaasta!</p>
+	<form method="POST">
+		<label>Teie sünniaasta: </label>
+		<input id="yearBirth" name="yearBirth" type="number" min="1900" max="2017" value="<?php echo $myBirthYear; ?>">
+		<input id="submitYearBirth" name="submitYearBirth" type="submit" value="Kinnita">
+	</form>
+	<p>Teie vanus on <?php echo $myAge; ?> aastat.</p>
+	<?php 
+		if ($myLivedYearsList != ""){
+			echo "<h3>Oled elanud järgnevatel aastatel</h3> \n";
+			echo $myLivedYearsList;
+		}	
+	
 	?>
 </body>
 </html>
