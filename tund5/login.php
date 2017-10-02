@@ -2,6 +2,12 @@
 	require("../../../config.php");//vaata, et tunnis oleks õige
 	//echo $serverHost;
 	require("function.php");
+	//kui on sisse loginud, siis kohe main.php lehele
+	if (isset($_SESSION["userId"])){
+		header("Location: main.php");
+		exit();
+	}	
+	
 	$signupFirstName = "";
 	$signupFamilyName = "";
 	$gender = "";
@@ -12,6 +18,8 @@
 	$signupBirthDate = "";
 	
 	$loginEmail = "";
+	$notice = "";
+	
 	$signupFirstNameError = "";
 	$signupFamilyNameError = "";
 	$signupBirthDayError = "";
@@ -21,6 +29,10 @@
 	
 	$loginEmailError ="";
 	
+	//kas logitakse sisse
+	if (isset($_POST["loginButton"])){
+	
+	
 	//kas on kasutajanimi sisestatud
 	if (isset ($_POST["loginEmail"])){
 		if (empty ($_POST["loginEmail"])){
@@ -29,6 +41,13 @@
 			$loginEmail = $_POST["loginEmail"];
 		}
 	}
+		if(!empty($loginEmail) and !empty($_POST["loginPassword"])){
+			//echo "Login sisse!";
+			//kutsun sisselogimise funktsiooni
+			$notice = signIn($loginEmail, $_POST["loginPassword"]);
+			
+		}	
+	}//if loginbutton
 	
 	//kõiki kasutaja loomise sisestusi kontrollitakse vaid, kui on vastavat nuppu klikitud
 	if(isset($_POST["signUpButton"]) and $_POST["signUpButton"] == "Loo kasutaja"){
@@ -190,7 +209,7 @@
 		<br><br>
 		<input name="loginPassword" placeholder="Salasõna" type="password"><span></span>
 		<br><br>
-		<input type="submit" value="Logi sisse">
+		<input name="loginButton" type="submit" value="Logi sisse"><span><?php echo $notice; ?></span>
 	</form>
 	
 	<h1>Loo kasutaja</h1>
