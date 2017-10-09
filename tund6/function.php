@@ -83,7 +83,9 @@
 	function readAllIdeas(){
 		$ideasHTML = "";
 		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-		$stmt = $mysqli->prepare("SELECT idea, ideaColor FROM vpuserideas");
+		//$stmt = $mysqli->prepare("SELECT idea, ideaColor FROM vpuserideas WHERE userid = ?");
+		$stmt = $mysqli->prepare("SELECT idea, ideaColor FROM vpuserideas WHERE userid = ? ORDER BY id DESC");
+		$stmt->bind_param("i", $_SESSION["userId"]);
 		$stmt->bind_result($idea, $color);
 		$stmt->execute();
 		//$result = array();//?
@@ -94,6 +96,26 @@
 		$mysqli->close();
 		return $ideasHTML;
 	}
+	
+	//uusima idee lugemine
+	function latestIdea(){
+		$ideasHTML = "";
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		$stmt = $mysqli->prepare("SELECT idea FROM vpuserideas WHERE id = (SELECT MAX(id) FROM vpuserideas)");
+		$stmt->bind_result($idea);
+		/*if($stmt->execute()){
+			$ideaHTML .= $idea
+		} else {
+			echo "Tekkis viga: " .$stmt->error;
+		}*/	
+		$stmt->execute();
+		$stmt->fetch(); //nüüd jääb meelde, kui fetch() ei tee, siis andmeid ei saa!!!!
+		$stmt->close();
+		$mysqli->close();
+		return $idea;
+	}
+		
+	
 	
 	//sisestuse kontrollimise funktsioon
 	function test_input($data){
