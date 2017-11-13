@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>
-		Kristo Roots veebiprogemise asjad
+		Kristo Rootsi veebiprogemise asjad
 	</title>
 </head>
 <body>

@@ -62,11 +62,11 @@
 				$uploadOk = 0;
 			}
 			
-			//Piirame faili suuruse
+			/*Piirame faili suuruse
 			if ($_FILES["fileToUpload"]["size"] > 1000000) {
 				$notice .= "Pilt on liiga suur! ";
 				$uploadOk = 0;
-			}
+			}*/
 			
 			//Piirame failitüüpe
 			if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
@@ -90,79 +90,7 @@
 			//Kui saab üles laadida
 			} else {
 				
-				//loeme EXIF infot, millal pilt tehti
-				/*@$exif = exif_read_data($_FILES["fileToUpload"]["tmp_name"], "ANY_TAG", 0, true);
-				//var_dump($exif);
-				if(!empty($exif["DateTimeOriginal"])){
-					$textToImage = "Pilt tehti: " .$exif["DateTimeOriginal"];
-				} else {
-					$textToImage = "Pildistamise aeg teadmata!";
-				}*/
 				
-				//lähtudes failitüübist, loon sobiva pildiobjekti
-				/*if($imageFileType == "jpg" or $imageFileType == "jpeg"){
-					$myTempImage = imagecreatefromjpeg($_FILES["fileToUpload"]["tmp_name"]);
-				}
-				if($imageFileType == "png"){
-					$myTempImage = imagecreatefrompng($_FILES["fileToUpload"]["tmp_name"]);
-				}
-				if($imageFileType == "gif"){
-					$myTempImage = imagecreatefromgif($_FILES["fileToUpload"]["tmp_name"]);
-				}*/
-				
-				//suuruse muutmine
-				//küsime originaalsuurust
-				/*$imageWidth = imagesx($myTempImage);
-				$imageHeight = imagesy($myTempImage);
-				$sizeRatio = 1;
-				if($imageWidth > $imageHeight){
-					$sizeRatio = $imageWidth / $maxWidth;
-				} else {
-					$sizeRatio = $imageHeight / $maxHeight;
-				}
-				$myImage = resize_image($myTempImage, $imageWidth, $imageHeight, round($imageWidth / $sizeRatio), round($imageHeight / $sizeRatio));*/
-				
-				//vesimärgi lisamine
-				/*$stamp = imagecreatefrompng("../../vesimärk/hmv_logo.png");
-				$stampWidth = imagesx($stamp);
-				$stampHeight = imagesy($stamp);
-				$stampPosX = round($imageWidth / $sizeRatio) - $stampWidth - $marginRight;
-				$stampPosY = round($imageHeight / $sizeRatio) - $stampHeight - $marginBottom;
-				imageCopy($myImage, $stamp, $stampPosX, $stampPosY, 0, 0, $stampWidth, $stampHeight);*/
-				
-				//lisame ka teksti vesimärgina
-				//imagecolorallocate
-				/*$textColor = imagecolorallocatealpha($myImage, 150, 150, 150, 50);
-				//RGBA alpha 0 -127
-				imagettftext($myImage, 20, 0, 10, 25, $textColor, "../../vesimärk/ARIAL.TTF", $textToImage);*/
-				
-				//salvestame pildi
-				/*if($imageFileType == "jpg" or $imageFileType == "jpeg"){
-					if(imagejpeg($myImage, $target_file, 95)){
-						$notice = "Fail: " . basename( $_FILES["fileToUpload"]["name"]). " laeti üles! ";
-					} else {
-						$notice .= "Vabandust, üleslaadimisel tekkis tõrge! ";
-					}
-				}
-				if($imageFileType == "png"){
-					if(imagepng($myImage, $target_file, 95)){
-						$notice = "Fail: " . basename( $_FILES["fileToUpload"]["name"]). " laeti üles! ";
-					} else {
-						$notice .= "Vabandust, üleslaadimisel tekkis tõrge! ";
-					}
-				}
-				if($imageFileType == "gif"){
-					if(imagegif($myImage, $target_file, 95)){
-						$notice = "Fail: " . basename( $_FILES["fileToUpload"]["name"]). " laeti üles! ";
-					} else {
-						$notice .= "Vabandust, üleslaadimisel tekkis tõrge! ";
-					}
-				}*/
-				
-				//mälu vabastamine
-				/*imagedestroy($myImage);
-				imagedestroy($myTempImage);
-				imagedestroy($stamp);*/
 				
 				//kasutan klassi
 				$myPhoto = new Photoupload($_FILES["fileToUpload"]["tmp_name"], $imageFileType);
@@ -200,10 +128,11 @@
 	<form action="photoupload.php" method="post" enctype="multipart/form-data">
 		<label>Valige pildifail:</label>
 		<input type="file" name="fileToUpload" id="fileToUpload">
-		<input type="submit" value="Lae üles" name="submit">
+		<input type="submit" value="Lae üles" name="submit" id="submitPhoto"><span id="fileSizeError"></span>
 	</form>
 	
 	<span><?php echo $notice; ?></span>
 <?php
 	require("footer.php");
+	echo '<script type="text/javascript" src="javascript/checkFileSize.js"></script>';
 ?>
