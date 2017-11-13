@@ -10,5 +10,6 @@ function checkSize(){
 		document.getElementById("fileSizeError").innerHTML = "";
 	} else {
 		document.getElementById("fileSizeError").innerHTML = "Valitud fail on liiga suur! Valige pilt mahuga kuni 2MB!";
+		document.getElementById("submitPhoto").disabled = true;
 	}
 }	
